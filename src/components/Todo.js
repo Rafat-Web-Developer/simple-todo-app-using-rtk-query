@@ -1,13 +1,21 @@
 import cancelImage from "../assets/images/cancel.png";
 import { useDeleteTodoMutation } from "../features/api/apiSlice";
+import noteImage from "../assets/images/notes.png";
+import { useDispatch } from "react-redux";
+import { showModel } from "../features/modal/modalSlice";
 
 export default function Todo({ todo }) {
   const [deleteTodo, { isSuccess, isLoading, isError }] =
     useDeleteTodoMutation();
+  const dispatch = useDispatch();
   const { id, text, completed, color } = todo;
 
   const handleDelete = (todoID) => {
     deleteTodo(todoID);
+  };
+
+  const handleEditButton = () => {
+    dispatch(showModel());
   };
 
   return (
@@ -24,6 +32,15 @@ export default function Todo({ todo }) {
 
       <div className={`select-none flex-1 ${completed ? "line-through" : ""}`}>
         {text}
+      </div>
+
+      <div>
+        <img
+          src={noteImage}
+          className="w-4 h-4 cursor-pointer"
+          alt="Add todo"
+          onClick={handleEditButton}
+        />
       </div>
 
       <div
