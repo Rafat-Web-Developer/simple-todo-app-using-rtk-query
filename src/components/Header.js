@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 import tickImage from "../assets/images/double-tick.png";
 import noteImage from "../assets/images/notes.png";
 import plusImage from "../assets/images/plus.png";
@@ -8,6 +9,9 @@ export default function Header() {
   const [addTodo, { data: todo, isLoading, isError }] = useAddTodoMutation();
   const [inputText, setInputText] = useState("");
 
+  const functionThatReturnPromise = () =>
+    new Promise((resolve) => setTimeout(resolve, 3000));
+
   const handleSubmit = (e) => {
     e.preventDefault();
     addTodo({
@@ -16,6 +20,11 @@ export default function Header() {
       color: "",
     });
     setInputText("");
+    toast.promise(functionThatReturnPromise, {
+      pending: "Promise is pending",
+      success: "Promise resolved 👌",
+      error: "Promise rejected 🤯",
+    });
   };
 
   return (

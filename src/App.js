@@ -1,9 +1,11 @@
 import { useSelector } from "react-redux";
+import { ToastContainer } from "react-toastify";
 import EditModal from "./components/EditModal";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Navbar from "./components/Navbar";
 import TodoList from "./components/TodoList";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const modal = useSelector((state) => state.modal);
@@ -24,6 +26,7 @@ function App() {
           <Footer />
         </div>
       </div>
+      <ToastContainer />
       {modal.active && <EditModal />}
     </>
   );
