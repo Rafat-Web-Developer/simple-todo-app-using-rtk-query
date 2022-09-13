@@ -6,12 +6,27 @@ import {
 import noteImage from "../assets/images/notes.png";
 import { useDispatch } from "react-redux";
 import { showModel } from "../features/modal/modalSlice";
+import Loading from "./Loading";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 export default function Todo({ todo }) {
   const [editTodo, { data: editedTodo }] = useEditTodoMutation();
-  const [deleteTodo, { isSuccess }] = useDeleteTodoMutation();
+  const [deleteTodo, { isLoading, isError, isSuccess }] =
+    useDeleteTodoMutation();
   const dispatch = useDispatch();
   const { id, text, completed, color } = todo;
+
+  useEffect(() => {
+    if (isError) {
+      toast.error("Something error", { autoClose: 2000 });
+    }
+    if (!isError && isSuccess) {
+      toast.success("Todo's deleted successfully Alhamdulillah", {
+        autoClose: 2000,
+      });
+    }
+  }, [isError, isSuccess]);
 
   const handleDelete = (todoID) => {
     deleteTodo(todoID);
@@ -46,8 +61,8 @@ export default function Todo({ todo }) {
     });
   };
 
-  return (
-    <div className="flex justify-start items-center p-2 hover:bg-gray-100 hover:transition-all space-x-4 border-b border-gray-400/20 last:border-0">
+  let content = (
+    <>
       <div className="rounded-full bg-white border-2 border-gray-400 w-5 h-5 flex flex-shrink-0 justify-center items-center mr-2 border-green-500 focus-within:border-green-500">
         <input type="checkbox" className="opacity-0 absolute rounded-full" />
         <svg
@@ -98,6 +113,16 @@ export default function Todo({ todo }) {
         alt="Cancel"
         onClick={() => handleDelete(id)}
       />
+    </>
+  );
+
+  if (isLoading) {
+    content = <Loading />;
+  }
+
+  return (
+    <div className="flex justify-start items-center p-2 hover:bg-gray-100 hover:transition-all space-x-4 border-b border-gray-400/20 last:border-0">
+      {content}
     </div>
   );
 }

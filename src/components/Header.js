@@ -13,10 +13,12 @@ export default function Header() {
 
   useEffect(() => {
     if (isError) {
-      toast.error("Something wrong");
+      toast.error("Something wrong", { autoClose: 2000 });
     }
     if (!isError && isSuccess) {
-      toast.success("Todo added succsessfully Alhamdulillah");
+      toast.success("Todo added succsessfully Alhamdulillah", {
+        autoClose: 2000,
+      });
     }
   }, [isError, isSuccess]);
 
