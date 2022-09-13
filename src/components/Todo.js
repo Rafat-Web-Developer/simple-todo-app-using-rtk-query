@@ -1,12 +1,15 @@
 import cancelImage from "../assets/images/cancel.png";
-import { useDeleteTodoMutation } from "../features/api/apiSlice";
+import {
+  useDeleteTodoMutation,
+  useEditTodoMutation,
+} from "../features/api/apiSlice";
 import noteImage from "../assets/images/notes.png";
 import { useDispatch } from "react-redux";
 import { showModel } from "../features/modal/modalSlice";
 
 export default function Todo({ todo }) {
-  const [deleteTodo, { isSuccess, isLoading, isError }] =
-    useDeleteTodoMutation();
+  const [editTodo, { data: editedTodo }] = useEditTodoMutation();
+  const [deleteTodo, { isSuccess }] = useDeleteTodoMutation();
   const dispatch = useDispatch();
   const { id, text, completed, color } = todo;
 
@@ -16,6 +19,31 @@ export default function Todo({ todo }) {
 
   const handleEditButton = (editTodoID) => {
     dispatch(showModel(editTodoID));
+  };
+
+  const handleSelectGreenPriority = (editTodoID) => {
+    editTodo({
+      id: editTodoID,
+      data: {
+        color: "green",
+      },
+    });
+  };
+  const handleSelectYellowPriority = (editTodoID) => {
+    editTodo({
+      id: editTodoID,
+      data: {
+        color: "yellow",
+      },
+    });
+  };
+  const handleSelectRedPriority = (editTodoID) => {
+    editTodo({
+      id: editTodoID,
+      data: {
+        color: "red",
+      },
+    });
   };
 
   return (
@@ -47,18 +75,21 @@ export default function Todo({ todo }) {
         className={`flex-shrink-0 h-4 w-4 rounded-full border-2 ml-auto cursor-pointer border-green-500 hover:bg-green-500 ${
           color === "green" ? "bg-green-500" : ""
         }`}
+        onClick={() => handleSelectGreenPriority(id)}
       ></div>
 
       <div
         className={`flex-shrink-0 h-4 w-4 rounded-full border-2 ml-auto cursor-pointer border-yellow-500 hover:bg-yellow-500 ${
           color === "yellow" ? "bg-yellow-500" : ""
         }`}
+        onClick={() => handleSelectYellowPriority(id)}
       ></div>
 
       <div
         className={`flex-shrink-0 h-4 w-4 rounded-full border-2 ml-auto cursor-pointer border-red-500 hover:bg-red-500 ${
           color === "red" ? "bg-red-500" : ""
         }`}
+        onClick={() => handleSelectRedPriority(id)}
       ></div>
 
       <img
