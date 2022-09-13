@@ -24,7 +24,7 @@ export default function TodoList() {
     );
   }
   if (!isLoading && !isError && todos.length > 0) {
-    content = todos.map((todo) => <Todo key={todo.id} />);
+    content = todos.map((todo) => <Todo key={todo.id} todo={todo} />);
   }
   return (
     <div className="mt-2 text-gray-700 text-sm max-h-[300px] overflow-y-auto">
