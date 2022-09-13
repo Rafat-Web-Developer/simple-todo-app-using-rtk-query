@@ -1,16 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import tickImage from "../assets/images/double-tick.png";
 import noteImage from "../assets/images/notes.png";
 import plusImage from "../assets/images/plus.png";
 import { useAddTodoMutation } from "../features/api/apiSlice";
+import Loading from "./Loading";
 
 export default function Header() {
-  const [addTodo, { data: todo, isLoading, isError }] = useAddTodoMutation();
+  const [addTodo, { data: todo, isLoading, isError, isSuccess }] =
+    useAddTodoMutation();
   const [inputText, setInputText] = useState("");
 
-  const functionThatReturnPromise = () =>
-    new Promise((resolve) => setTimeout(resolve, 3000));
+  useEffect(() => {
+    if (isError) {
+      toast.error("Something wrong");
+    }
+    if (!isError && isSuccess) {
+      toast.success("Todo added succsessfully Alhamdulillah");
+    }
+  }, [isError, isSuccess]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,12 +28,15 @@ export default function Header() {
       color: "",
     });
     setInputText("");
-    toast.promise(functionThatReturnPromise, {
-      pending: "Promise is pending",
-      success: "Promise resolved 👌",
-      error: "Promise rejected 🤯",
-    });
   };
+
+  let content = <img src={noteImage} className="w-6 h-6" alt="Add todo" />;
+  if (isLoading) {
+    content = <Loading />;
+  }
+  if (!isLoading && isSuccess) {
+    content = <img src={noteImage} className="w-6 h-6" alt="Add todo" />;
+  }
 
   return (
     <div>
@@ -33,7 +44,7 @@ export default function Header() {
         onSubmit={handleSubmit}
         className="flex items-center bg-gray-100 px-4 py-4 rounded-md"
       >
-        <img src={noteImage} className="w-6 h-6" alt="Add todo" />
+        {content}
         <input
           type="text"
           value={inputText}
