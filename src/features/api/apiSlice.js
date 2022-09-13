@@ -5,7 +5,7 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "https://learn-with-summit-server.herokuapp.com",
   }),
-  tagTypes: ["todos"],
+  tagTypes: ["todos", "todo"],
   endpoints: (builder) => ({
     getTodos: builder.query({
       query: () => "/todos",
@@ -14,6 +14,7 @@ export const apiSlice = createApi({
     }),
     getTodo: builder.query({
       query: (id) => `/todos/${id}`,
+      providesTags: (result, error, arg) => [{ type: "todo", id: arg }],
     }),
     addTodo: builder.mutation({
       query: (data) => ({
@@ -22,6 +23,17 @@ export const apiSlice = createApi({
         body: data,
       }),
       invalidatesTags: ["todos"],
+    }),
+    editTodo: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/todos/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: (result, error, arg) => [
+        "todos",
+        { type: "todo", id: arg.id },
+      ],
     }),
     deleteTodo: builder.mutation({
       query: (id) => ({
