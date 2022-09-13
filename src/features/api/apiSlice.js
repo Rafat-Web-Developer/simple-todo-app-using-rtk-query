@@ -50,4 +50,5 @@ export const {
   useGetTodoQuery,
   useAddTodoMutation,
   useDeleteTodoMutation,
+  useEditTodoMutation,
 } = apiSlice;

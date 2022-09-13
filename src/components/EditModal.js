@@ -2,12 +2,18 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetTodoQuery } from "../features/api/apiSlice";
 import { cancleModel } from "../features/modal/modalSlice";
+import EditForm from "./EditForm";
 import Loading from "./Loading";
 
 const EditModal = () => {
   const { editTodoId } = useSelector((state) => state.modal);
   const dispatch = useDispatch();
-  const { data: todo, isLoading, isError } = useGetTodoQuery(editTodoId);
+  const {
+    data: todo,
+    isLoading,
+    isError,
+    isSuccess,
+  } = useGetTodoQuery(editTodoId);
 
   const handleCancleModal = () => {
     dispatch(cancleModel());
@@ -24,34 +30,8 @@ const EditModal = () => {
       </div>
     );
   }
-  if (!isLoading && !isError && todo) {
-    content = (
-      <form>
-        <label
-          for="name"
-          class="text-gray-800 text-sm font-bold leading-tight tracking-normal"
-        >
-          Todo Text
-        </label>
-        <input
-          id="name"
-          class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
-          placeholder="James"
-          value={todo.text}
-        />
-        <div class="flex items-center justify-start w-full">
-          <button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm">
-            Submit
-          </button>
-          <button
-            class="focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm"
-            onClick={handleCancleModal}
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
-    );
+  if (!isLoading && !isError && todo?.text) {
+    content = <EditForm todo={todo} handleCancleModal={handleCancleModal} />;
   }
 
   return (
