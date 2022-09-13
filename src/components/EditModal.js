@@ -1,8 +1,9 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { cancleModel } from "../features/modal/modalSlice";
 
 const EditModal = () => {
+  const { editTodoId } = useSelector((state) => state.modal);
   const dispatch = useDispatch();
 
   const handleCancleModal = () => {
@@ -30,6 +31,7 @@ const EditModal = () => {
               id="name"
               class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
               placeholder="James"
+              value={editTodoId}
             />
             <div class="flex items-center justify-start w-full">
               <button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm">

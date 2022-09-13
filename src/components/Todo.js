@@ -14,8 +14,8 @@ export default function Todo({ todo }) {
     deleteTodo(todoID);
   };
 
-  const handleEditButton = () => {
-    dispatch(showModel());
+  const handleEditButton = (editTodoID) => {
+    dispatch(showModel(editTodoID));
   };
 
   return (
@@ -38,8 +38,8 @@ export default function Todo({ todo }) {
         <img
           src={noteImage}
           className="w-4 h-4 cursor-pointer"
-          alt="Add todo"
-          onClick={handleEditButton}
+          alt="Edit todo"
+          onClick={() => handleEditButton(id)}
         />
       </div>
 
