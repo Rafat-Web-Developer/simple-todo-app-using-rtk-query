@@ -1,14 +1,58 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useGetTodoQuery } from "../features/api/apiSlice";
 import { cancleModel } from "../features/modal/modalSlice";
+import Loading from "./Loading";
 
 const EditModal = () => {
   const { editTodoId } = useSelector((state) => state.modal);
   const dispatch = useDispatch();
+  const { data: todo, isLoading, isError } = useGetTodoQuery(editTodoId);
 
   const handleCancleModal = () => {
     dispatch(cancleModel());
   };
+
+  let content = null;
+  if (isLoading) {
+    content = <Loading />;
+  }
+  if (!isLoading && isError) {
+    content = (
+      <div>
+        <p>Something error</p>
+      </div>
+    );
+  }
+  if (!isLoading && !isError && todo) {
+    content = (
+      <form>
+        <label
+          for="name"
+          class="text-gray-800 text-sm font-bold leading-tight tracking-normal"
+        >
+          Todo Text
+        </label>
+        <input
+          id="name"
+          class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
+          placeholder="James"
+          value={todo.text}
+        />
+        <div class="flex items-center justify-start w-full">
+          <button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm">
+            Submit
+          </button>
+          <button
+            class="focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm"
+            onClick={handleCancleModal}
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    );
+  }
 
   return (
     <>
@@ -21,32 +65,9 @@ const EditModal = () => {
             <h1 class="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">
               Edit Todo
             </h1>
-            <label
-              for="name"
-              class="text-gray-800 text-sm font-bold leading-tight tracking-normal"
-            >
-              Todo Text
-            </label>
-            <input
-              id="name"
-              class="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
-              placeholder="James"
-              value={editTodoId}
-            />
-            <div class="flex items-center justify-start w-full">
-              <button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm">
-                Submit
-              </button>
-              <button
-                class="focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm"
-                onClick={handleCancleModal}
-              >
-                Cancel
-              </button>
-            </div>
+            {content}
             <button
               class="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600"
-              onclick="modalHandler()"
               aria-label="close modal"
               role="button"
             >

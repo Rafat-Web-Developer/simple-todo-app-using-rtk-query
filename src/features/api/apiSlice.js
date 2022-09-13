@@ -12,6 +12,9 @@ export const apiSlice = createApi({
       keepUnusedDataFor: 600,
       providesTags: ["todos"],
     }),
+    getTodo: builder.query({
+      query: (id) => `/todos/${id}`,
+    }),
     addTodo: builder.mutation({
       query: (data) => ({
         url: "/todos",
@@ -30,5 +33,9 @@ export const apiSlice = createApi({
   }),
 });
 
-export const { useGetTodosQuery, useAddTodoMutation, useDeleteTodoMutation } =
-  apiSlice;
+export const {
+  useGetTodosQuery,
+  useGetTodoQuery,
+  useAddTodoMutation,
+  useDeleteTodoMutation,
+} = apiSlice;
