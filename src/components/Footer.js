@@ -1,17 +1,40 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useGetTodosQuery } from "../features/api/apiSlice";
 import {
   removeColor,
   resetFilter,
   setColor,
   setStatus,
 } from "../features/filter/filterSlice";
+import Loading from "./Loading";
 
 export default function Footer() {
+  const { data: todos, isLoading, isError } = useGetTodosQuery();
   const dispatch = useDispatch();
   const { colors } = useSelector((state) => state.filter);
+
+  let content = null;
+  if (isLoading) {
+    content = <p>Searching...</p>;
+  }
+  if (!isLoading && isError) {
+    content = (
+      <div>
+        <p>Something error</p>
+      </div>
+    );
+  }
+  if (!isLoading && !isError && todos.length === 0) {
+    content = <p>No tasks left </p>;
+  }
+  if (!isLoading && !isError && todos.length > 0) {
+    const incompleteTask = todos.filter((todo) => !todo.completed);
+    content = <p>{incompleteTask.length} tasks left </p>;
+  }
+
   return (
     <div className="mt-4 flex justify-between text-xs text-gray-500">
-      <p>2 tasks left</p>
+      {content}
       <ul className="flex space-x-1 items-center text-xs">
         <li
           className="cursor-pointer font-bold"
