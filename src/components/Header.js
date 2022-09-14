@@ -59,14 +59,14 @@ export default function Header() {
           className={`appearance-none w-8 h-8 bg-[url('${plusImage}')] bg-no-repeat bg-contain`}
         ></button>
       </form>
-
+      {/* 
       <ul className="flex justify-between my-4 text-xs text-gray-500">
         <li className="flex space-x-1 cursor-pointer">
           <img className="w-4 h-4" src={tickImage} alt="Complete" />
           <span>Complete All Tasks</span>
         </li>
         <li className="cursor-pointer">Clear completed</li>
-      </ul>
+      </ul> */}
     </div>
   );
 }
